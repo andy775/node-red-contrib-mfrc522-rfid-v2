@@ -78,7 +78,7 @@ module.exports = function(RED) {
         node.status({
           fill: "green",
           shape: "dot",
-          text: uid
+          text: data || uid
         });
 
         last_time = timestamp;
