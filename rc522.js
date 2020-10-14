@@ -51,14 +51,15 @@ module.exports = function(RED) {
 
       if (uid != last_uid || timestamp > (last_time + node.blockedFor * 1000)) {
         let data = null;
-        if (config.dataBlockAddr) {
+        if (config.dataBlockAddr && config.dataBlockLength) {
+          const addr = parseInt(config.dataBlockAddr, 10);
           data = '';
           // Select the scanned card
           mfrc522.selectCard(uid_array);
           // This is the default key for authentication
           const key = [0xff, 0xff, 0xff, 0xff, 0xff, 0xff];
           // Authenticate on Block 8 with key and uid
-          if (!mfrc522.authenticate(config.dataBlockAddr, key, uid_array)) {
+          if (!mfrc522.authenticate(addr, key, uid_array)) {
             node.status({
               fill: "red",
               shape: "dot",
@@ -67,8 +68,8 @@ module.exports = function(RED) {
             console.log("Authentication Error");
             return;
           }
-          const len = config.dataBlockLength || 4;
-          const rawdata = mfrc522.getDataForBlock(config.dataBlockAddr);
+          const len = config.dataBlockLength ? parseInt(config.dataBlockLength, 10) : 4;
+          const rawdata = mfrc522.getDataForBlock(addr);
           for (let i=0; i<len; i++) {
             data += String.fromCharCode(rawdata[i]);
           }
