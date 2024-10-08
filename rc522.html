@@ -1,23 +1,33 @@
 <script type="text/javascript">
+    // Register the node type
     RED.nodes.registerType('rc522-extra',{
         category: 'network',
         color: '#E9967A',
         defaults: {
-            name: {value:""},
-            blockedFor: {value: 5, required: true, validate:RED.validators.number()},
-            CSpin: {value: 24, required: true, validate:RED.validators.number()},
-            dataBlockAddr: {value: 8},
-            dataBlockLength: {value: 4}
+            name: { value:"" },  // Node name
+            blockedFor: { 
+                value: 5, 
+                required: true, 
+                validate: RED.validators.number() // Ensure it’s a number
+            },
+            CSpin: { 
+                value: 24, 
+                required: true, 
+                validate: RED.validators.number() // Ensure it’s a number
+            },
+            dataBlockAddr: { value: 8 },  // Data block address
+            dataBlockLength: { value: 4 }  // Length of data block
         },
-        inputs: 0,
-        outputs: 1,
-        icon: "bridge.png",
+        inputs: 0,  // This node does not take inputs
+        outputs: 1,  // One output
+        icon: "bridge.png",  // Node icon
         label: function() {
-            return this.name || "rc522-extra";
+            return this.name || "rc522-extra";  // Display node name or default label
         }
     });
 </script>
 
+<!-- Node Configuration UI -->
 <script type="text/x-red" data-template-name="rc522-extra">
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
@@ -25,54 +35,57 @@
     </div>
 
     <div class="form-row">
-        <label for="node-input-CSpin">CS pin</label>
-        <input type="text" id="node-input-CSpin" placeholder="Chip Select pin">
+        <label for="node-input-CSpin">CS Pin</label>
+        <input type="number" id="node-input-CSpin" placeholder="Chip Select Pin">
     </div>
 
     <div class="form-row">
-        <label for="node-input-dataBlockAddr">Data block</label>
-        <input type="text" id="node-input-dataBlockAddr" placeholder="Data block address">
-    </div>
-    <div class="form-row">
-        <label for="node-input-dataBlockLength">Data length</label>
-        <input type="text" id="node-input-dataBlockLength" placeholder="Data block length">
+        <label for="node-input-dataBlockAddr">Data Block Address</label>
+        <input type="number" id="node-input-dataBlockAddr" placeholder="Data Block Address">
     </div>
 
     <div class="form-row">
-        <label for="node-input-blockedFor">Blocked for</label>
-        <input type="text" id="node-input-blockedFor" placeholder="Blocked for">
+        <label for="node-input-dataBlockLength">Data Block Length</label>
+        <input type="number" id="node-input-dataBlockLength" placeholder="Data Block Length">
     </div>
-    <div class="form-tips"><b>Enter a number of seconds the node shall not read another node for.</div>
+
+    <div class="form-row">
+        <label for="node-input-blockedFor">Blocked For (seconds)</label>
+        <input type="number" id="node-input-blockedFor" placeholder="Seconds to Block">
+    </div>
+
+    <div class="form-tips">
+        <b>Specify the number of seconds to block further reads after detecting a card.</b>
+    </div>
 </script>
 
+<!-- Help Documentation -->
 <script type="text/x-red" data-help-name="rc522-extra">
-<p>Reads the UID of NFC tags from a RC522 card reader..</p>
+    <p>Reads the UID of NFC tags from an RC522 card reader.</p>
 
- <h3>Output</h3>
-     <ol class="node-ports">
-         <li>Standard output
-             <dl class="message-properties">
-                 <dt>payload <span class="property-type">json</span></dt>
-                 <dd>the payload contains the UID as a hex string, as well as the timestamp and the bit size of the card.</dd>
-                 <code><pre>
+    <h3>Output</h3>
+    <ol class="node-ports">
+        <li>Standard output:
+            <dl class="message-properties">
+                <dt>payload <span class="property-type">json</span></dt>
+                <dd>The payload contains the UID as a hex string, along with the timestamp and the bit size of the card.</dd>
+                <pre><code>
 {
-  uid: "2c6715d",
+  uid: "2C:67:15:D",
   data: "OBJ1", 
   timestamp: 1572275898850,
   bitSize: 16
 }
+                </code></pre>
+            </dl>
+        </li>
+    </ol>
 
-</pre></code>
-             </dl>
-         </li>
-     </ol>
+    <h3>Details</h3>
+    <p><code>msg.payload</code> is used as the payload of the published message, containing UID, data, and timestamp.</p>
 
-<h3>Details</h3>
-    <p><code>msg.payload</code> is used as the payload of the published message.</p>
-
-<h3>References</h3>
+    <h3>References</h3>
     <ul>
-        <li><a>GitHub</a> - the nodes github repository</li>
+        <li><a href="https://github.com/your-repo-link">GitHub</a> - View the node’s repository</li>
     </ul>
-
 </script>
